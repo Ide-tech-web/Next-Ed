@@ -1,0 +1,5 @@
+Django==4.2
+djangorestframework==3.14
+mysqlclient==2.2.0  # Pour se connecter à MySQL
+Pillow==10.0.0      # Pour la gestion des images/uploads
+# Optionnel : djangorestframework-simplejwt (si vous choisissez JWT)

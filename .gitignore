@@ -1,0 +1,20 @@
+# Dossiers de dépendances et de build
+node_modules/
+frontend/build/
+venv/
+_pycache_/
+
+# Back-End Django/Python
+*.pyc
+*.log
+*.sqlite3
+db.sqlite3
+/backend/media/
+/backend/staticfiles/
+
+# Front-End React
+.env.local
+
+# Fichiers de configuration sensibles
+.env
+.DS_Store

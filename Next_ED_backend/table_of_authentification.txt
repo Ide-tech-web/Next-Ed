@@ -1,0 +1,5 @@
+Endpoint,Method,Purpose
+/api/register/,POST,Creates a new user (via your custom view).
+/api/token/,POST,"Login: Takes email and password, returns access_token and refresh_token (JWT built-in)."
+/api/token/refresh/,POST,"Takes refresh_token, returns a new access_token (JWT built-in)."
+/api/logout/,POST,Takes refresh_token and blacklists it (via your custom view).

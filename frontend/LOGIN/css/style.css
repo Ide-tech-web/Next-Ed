@@ -27,7 +27,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-	background-image: url(LOGIN/img/img4.jpg);
+	background-image: url(/frontend/LOGIN/img/img4.jpg);
 	background-size: cover;
 	background-position: center;
 }

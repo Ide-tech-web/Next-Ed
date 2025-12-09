@@ -27,18 +27,34 @@ body {
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-	background-image: url("img/img4.jpg");
+	background-image: url("img/Img1.jpg");
 	background-size: cover;
 	background-position: center;
 }
 .container {
 	position: relative;
 	width: 640px;
-	height: 440px;
+	height: 500px;
 	background: transparent;
 	border: 2px solid #4A4A4A;
 	border-radius: 10px;
 	overflow: hidden;
+}
+
+.logo-container {
+    width: 100%;
+    right: 60px;
+    text-align: right;
+    margin-top: 0;
+    position: absolute;
+    top: 5px;
+    z-index: 10;
+}
+
+.Img3 {
+    width: 200px;
+    height: auto;
+    mix-blend-mode: screen;
 }
 .content {
 	position: absolute;
@@ -47,17 +63,18 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	z-index: 10;
 }
 .content h2 {
 	font-size: 30px;
-	color: #fff;
+	color: #0E2C61;
 	text-align: center;
 	font-weight: 600;
 }
 .content hr {
 	width: 80px;
 	height: 5px;
-	background: #FFD700;
+	background: #FF6B00;
 	border-radius: 25px;
 	margin-left: 39%;
 	margin-top: 5px;
@@ -79,7 +96,7 @@ body {
 	background: transparent;
 	border: 0;
 	outline: none;
-	border-bottom: 1px solid #FFD700;
+	border-bottom: 1px solid #FF6B00;
 	border-radius: 40px;
 	color: #fff;
 	font-size: 18px;
@@ -91,7 +108,7 @@ body {
 .btn {
 	width: 90%;
 	height: 30px;
-	background: #4A4A4A;
+	background: #7693a2;
 	color: #fff;
 	border: 0;
 	font-size: 18px;
@@ -102,41 +119,32 @@ body {
 	transition: 0.5s;
 }
 .btn:hover {
-      background: #212121;
+      background: #0e2c61;
 }
 
 .text {
 	position: absolute;
 	width: 50%;
 	height: 100%;
-	top: 0;
+	top: 06%;
 	right: 0;
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	padding: 0 90px;
+	z-index: 1;
 }
 .text h2 {
 	font-size: 28px;
-	color: #FFD700;
+	color: #FF6B00;
 	text-align: center;
 	font-weight: 600;
 	text-transform: uppercase;
 }
 .text p {
-	color: #fff;
+	color: #112233;
 	font-size: 18px;
-	margin-top: 02px;
+	margin-bottom: 0;
 	text-align: center;
-}
-.drop {
-	position: absolute;
-	width: 600px;
-	height: 600px;
-	top: 0;
-	right: 0;
-	background: #212121;
-	transform: rotate(14deg) skewY(40deg);
-	transform-origin: bottom right;
 }

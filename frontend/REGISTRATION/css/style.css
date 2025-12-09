@@ -10,9 +10,24 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url("img/img4.jpg");
+    background-image: url("img/Img1.jpg");
     background-size: cover;
     background-position: center;
+}
+
+.logo-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 02px;
+    position: absolute;
+    top: 5px;
+    z-index: 10;
+}
+
+.Img3 {
+    width: 250px;
+    height: auto;
+    mix-blend-mode: screen;
 }
 
 .container {
@@ -20,14 +35,14 @@ body {
     width: 640px;
     height: 560px; /* plus grand pour accueillir plus de champs */
     background: transparent;
-    border: 2px solid #4A4A4A;
+    border: 2px solid #0E2C61;
     border-radius: 10px;
     overflow: hidden;
 }
 
 .content h2 {
     font-size: 25px;
-    color: #fff;
+    color: #0E2C61;
     text-align: center;
     font-weight: 600;
     position: relative; /* pour déplacer avec left/top */
@@ -52,18 +67,20 @@ body {
 .content {
     position: absolute;
     width: 50%;
-    height: 100%;
-    top: 10%;
+    height: auto;
+    top: 50%;
     right: 0; /* reste à droite */
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding-left: 50px;
+    justify-content: flex-start;
+    padding-left: 30px;
+    z-index: 10;
 }
 .content hr {
     width: 80px;
     height: 5px;
-    background: #FFD700;
+    background: #FF6B00;
     border-radius: 25px;
     margin-left: 25%;
     margin-top: 7px;
@@ -72,8 +89,8 @@ body {
 
 .box {
     width: 90%;
-    height: 40px;
-    margin: 15px auto;
+   /* height: 40px;*/
+    margin: 15px 0;
 }
 
 .box input {
@@ -82,9 +99,9 @@ body {
     background: transparent;
     border: 0;
     outline: none;
-    border-bottom: 1px solid #FFD700;
+    border-bottom: 1px solid #FF6B00;
     border-radius: 40px;
-    color: #fff;
+    color: #FFF;
     font-size: 18px;
     transition: border-bottom 0.3s;
 }
@@ -97,20 +114,50 @@ body {
 .btn {
     width: 90%;
     height: 40px;
-    background: #4A4A4A;
+    background: #7693a2;
     color: #fff;
     border: 0;
     font-size: 18px;
     letter-spacing: 3px;
     border-radius: 40px;
-    margin: 20px auto;
     cursor: pointer;
     display: block;
-    transition: 0.5s;
+    margin: 20px auto 10px auto;
+    /* Positionner en bas et centrer horizontalement */
+
+    bottom: 70px;       /* distance depuis le bas du container */
+    left: 50%;          /* centre horizontalement */
+    transform: translateX(-50%);*/
 }
 
 .btn:hover {
-    background: #212121;
+    background: #0e2c61;
+}
+
+.checkbox-container {
+    width: auto;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espace entre la case et le texte */
+    color: #fff;
+    font-size: 16px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #FFD700; /* couleur de la coche */
+    cursor: pointer;
+}
+
+.checkbox-container label {
+    cursor: pointer;
+}
+
+.href a{  
+color: #FFD700; 
+text-decoration: underline;
 }
 
 /* Effet shake */
@@ -131,7 +178,7 @@ body {
     position: absolute;
     width: 50%;
     height: 100%;
-    top: 20%;
+    top: 40%;
     left: 0; /* changement de right à left */
     border-radius: 10px;
     display: flex;
@@ -141,28 +188,15 @@ body {
 }
 .text h2 {
     font-size: 28px;
-    color: #FFD700;
+    color: #FF6B00;
     text-align: center;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .text p {
-    color: #fff;
+    color: #112233;
     font-size: 18px;
-    margin-top: 2px;
+    margin-bottom: 2px;
     text-align: center;
-}
-
-/* Drop derrière le texte gauche */
-.drop {
-    position: absolute;
-    width: 600px;
-    height: 570px;
-    top: 0;
-    left: 0; /* changement de right à left */
-    background: #212121;
-    transform: rotate(-10deg) skewY(-40deg);
-    transform-origin: bottom left;
-    z-index: -1;
 }

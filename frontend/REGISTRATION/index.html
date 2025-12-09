@@ -8,27 +8,33 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <img src="css/img/Img3.png" class="Img3">
+        </div>
         <div class="drop"></div>
         <div class="content">
             <h2>INSCRIPTION</h2>
             <hr/>
             <form id="registerForm">
                 <div class="box">
-                    <input type="text" placeholder="Nom complet" required>
+                    <input type="text" placeholder="Name" required>
                 </div>
                 <div class="box">
                     <input type="email" placeholder="Email" required>
                 </div>
                 <div class="box">
-                    <input type="text" placeholder="Nom d'utilisateur" required>
+                    <input type="password" placeholder="password" required>
                 </div>
                 <div class="box">
-                    <input type="password" placeholder="Mot de passe" required>
+                    <input type="password" placeholder="Confirm password" required>
                 </div>
-                <div class="box">
-                    <input type="password" placeholder="Confirmer le mot de passe" required>
+                    <button type="submit" class="btn">S'inscrire</button>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="haveAccount" name="haveAccount">
+                    <label for="haveAccount">Already have an account yet?   
+                        <a href="login.html">Login here</a>
+                    </label>
                 </div>
-                <button type="submit" class="btn">S'inscrire</button>
             </form>
         </div>
         <div class="text">

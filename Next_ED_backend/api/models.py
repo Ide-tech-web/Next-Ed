@@ -3,7 +3,9 @@
 from django.db import models
 # Note the import of BaseUserManager
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.conf import settings 
+from django.conf import settings
+from django.utils import timezone 
+from cloudinary_storage.storage import MediaCloudinaryStorage, RawMediaCloudinaryStorage
 
 
 # ----------------- Custom User Manager (NEW) -----------------
@@ -41,9 +43,19 @@ class CustomUser(AbstractUser):
 
     ROLE_CHOICES = (
         ('STUDENT', 'Student'),
+        ('DELEGATE', 'Delegate'),
         ('ADMIN', 'Admin'),
     )
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='STUDENT')
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1, null=True, blank=True)
+    
+    # New Cloudinary Avatar Field
+    avatar = models.ImageField(upload_to='avatars/', storage=MediaCloudinaryStorage(), blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name'] 
@@ -55,26 +67,35 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-# ----------------- Course Model (Existing) -----------------
+# ----------------- Course Model (UPDATED) -----------------
 class Course(models.Model):
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
+    
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1)
+    
+    # New Cloudinary Thumbnail Field
+    thumbnail = models.ImageField(upload_to='course_thumbnails/', storage=MediaCloudinaryStorage(), blank=True, null=True)
     
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
-        null=True, 
-        limit_choices_to={'role': 'ADMIN'}
+        null=True
     )
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} (Level {self.level})"
     
     class Meta:
-        ordering = ['title']
+        ordering = ['level', 'title']
 
 
 # ----------------- Lesson Model (Existing) -----------------
@@ -87,7 +108,8 @@ class Lesson(models.Model):
     
     title = models.CharField(max_length=255)
     content = models.TextField()
-    file_path = models.CharField(max_length=500, blank=True, null=True)
+    # Implicitly uses DEFAULT_FILE_STORAGE (RawMediaCloudinaryStorage)
+    file_path = models.FileField(upload_to='lessons/', blank=True, null=True)
     order = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -97,25 +119,293 @@ class Lesson(models.Model):
         ordering = ['course', 'order']
 
 
-# ----------------- Student Progress Model (Existing) -----------------
+# ----------------- Quiz System Models (NEW) -----------------
+class Quiz(models.Model):
+    course = models.ForeignKey(
+        Course, 
+        on_delete=models.CASCADE, 
+        related_name='quizzes'
+    )
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.course.title} - {self.title}"
+
+class Question(models.Model):
+    quiz = models.ForeignKey(
+        Quiz, 
+        on_delete=models.CASCADE, 
+        related_name='questions'
+    )
+    text = models.TextField()
+    
+    def __str__(self):
+        return f"Question for {self.quiz.title}"
+
+class Choice(models.Model):
+    question = models.ForeignKey(
+        Question, 
+        on_delete=models.CASCADE, 
+        related_name='choices'
+    )
+    text = models.CharField(max_length=255)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text
+
+
+# ----------------- Student Progress Model (UPDATED) -----------------
 class StudentProgress(models.Model):
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
-        limit_choices_to={'role': 'STUDENT'}
+        limit_choices_to={'role': 'STUDENT'},
+        related_name='progress'
     )
     
+    # Progress can be linked to a Lesson OR a Quiz
     lesson = models.ForeignKey(
         Lesson, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        null=True, blank=True
     )
     
+    # General status
     completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
+    
+    # Quiz specific
+    score = models.FloatField(default=0.0) # Percentage or points
 
     def __str__(self):
-        return f"{self.student.email} progress on {self.lesson.title}"
+        if self.lesson:
+            return f"{self.student.email} - Lesson: {self.lesson.title}"
+        elif self.quiz:
+            return f"{self.student.email} - Quiz: {self.quiz.title} ({self.score}%)"
+        return f"{self.student.email} - Unknown Progress"
     
     class Meta:
-        unique_together = ('student', 'lesson')
+        # Enforce unique progress record per student per item type
+        constraints = [
+            models.UniqueConstraint(fields=['student', 'lesson'], name='unique_lesson_progress', condition=models.Q(lesson__isnull=False)),
+            models.UniqueConstraint(fields=['student', 'quiz'], name='unique_quiz_progress', condition=models.Q(quiz__isnull=False))
+        ]
         verbose_name_plural = "Student Progress"
+
+
+# ----------------- Note Model -----------------
+class Note(models.Model):
+    """
+    Course notes and study materials uploaded by admins
+    """
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
+    
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    # Implicitly uses DEFAULT_FILE_STORAGE (RawMediaCloudinaryStorage)
+    file = models.FileField(upload_to='notes/')
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='notes'
+    )
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1)
+    
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title} - {self.course.title}"
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ----------------- Exercise Model -----------------
+class Exercise(models.Model):
+    """
+    Practice exercises and TDs for students
+    """
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
+    
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    # Implicitly uses DEFAULT_FILE_STORAGE (RawMediaCloudinaryStorage)
+    file = models.FileField(upload_to='exercises/')
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='exercises'
+    )
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1)
+    
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title} - {self.course.title}"
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ----------------- Exam Model -----------------
+class Exam(models.Model):
+    """
+    Past exams for students to practice
+    """
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
+    
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    # Implicitly uses DEFAULT_FILE_STORAGE (RawMediaCloudinaryStorage)
+    file = models.FileField(upload_to='exams/')
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='exams'
+    )
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1)
+    
+    EXAM_TYPE_CHOICES = (
+        ('CC', 'Contrôle Continu'),
+        ('SN', 'Session Normale'),
+        ('SR', 'Session Rattrapage'),
+    )
+    exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES, default='SN')
+    
+    year = models.IntegerField(null=True, blank=True)
+    
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        year_str = f" ({self.year})" if self.year else ""
+        return f"{self.title}{year_str} - {self.course.title}"
+    
+    class Meta:
+        ordering = ['-year', '-created_at']
+
+
+# ----------------- Correction Model -----------------
+class Correction(models.Model):
+    """
+    Solutions and corrections for exams
+    """
+    exam = models.OneToOneField(
+        Exam,
+        on_delete=models.CASCADE,
+        related_name='correction'
+    )
+    description = models.TextField(blank=True)
+    # Implicitly uses DEFAULT_FILE_STORAGE (RawMediaCloudinaryStorage)
+    file = models.FileField(upload_to='corrections/')
+    
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Correction for {self.exam.title}"
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ----------------- Student Question Model -----------------
+class StudentQuestion(models.Model):
+    """
+    Questions and clarification requests from students to admins
+    """
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('ANSWERED', 'Answered'),
+    )
+    
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'role': 'STUDENT'},
+        related_name='questions'
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='questions',
+        null=True,
+        blank=True
+    )
+    question_text = models.TextField()
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Question from {self.student.email} - {self.status}"
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ----------------- Question Response Model -----------------
+class QuestionResponse(models.Model):
+    """
+    Admin responses to student questions
+    """
+    question = models.ForeignKey(
+        StudentQuestion,
+        on_delete=models.CASCADE,
+        related_name='responses'
+    )
+    admin = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    response_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Response by {self.admin.email if self.admin else 'Unknown'}"
+    
+    class Meta:
+        ordering = ['created_at']

@@ -1,0 +1,202 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url("img/Img1.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.logo-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 02px;
+    position: absolute;
+    top: 5px;
+    z-index: 10;
+}
+
+.Img3 {
+    width: 250px;
+    height: auto;
+    mix-blend-mode: screen;
+}
+
+.container {
+    position: relative;
+    width: 640px;
+    height: 560px; /* plus grand pour accueillir plus de champs */
+    background: transparent;
+    border: 2px solid #0E2C61;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.content h2 {
+    font-size: 25px;
+    color: #0E2C61;
+    text-align: center;
+    font-weight: 600;
+    position: relative; /* pour déplacer avec left/top */
+    left: -08px;        /* décale légèrement vers la gauche */
+    top: -10px;         /* remonte un peu */
+    animation: headingMove 1s ease-out forwards; /* animation optionnelle */
+}
+
+/* Animation slide-up-left */
+@keyframes headingMove {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-20px, -10px);
+        opacity: 1;
+    }
+}
+
+/* Formulaire à droite */
+.content {
+    position: absolute;
+    width: 50%;
+    height: auto;
+    top: 50%;
+    right: 0; /* reste à droite */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 30px;
+    z-index: 10;
+}
+.content hr {
+    width: 80px;
+    height: 5px;
+    background: #FF6B00;
+    border-radius: 25px;
+    margin-left: 25%;
+    margin-top: 7px;
+    bottom: 0;
+}
+
+.box {
+    width: 90%;
+   /* height: 40px;*/
+    margin: 15px 0;
+}
+
+.box input {
+    width: 100%;
+    height: 48px;
+    background: transparent;
+    border: 0;
+    outline: none;
+    border-bottom: 1px solid #FF6B00;
+    border-radius: 40px;
+    color: #FFF;
+    font-size: 18px;
+    transition: border-bottom 0.3s;
+}
+
+.box input::placeholder {
+    color: #000;
+    font-size: 18px;
+}
+
+.btn {
+    width: 90%;
+    height: 40px;
+    background: #7693a2;
+    color: #fff;
+    border: 0;
+    font-size: 18px;
+    letter-spacing: 3px;
+    border-radius: 40px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 10px auto;
+    /* Positionner en bas et centrer horizontalement */
+
+    bottom: 70px;       /* distance depuis le bas du container */
+    left: 50%;          /* centre horizontalement */
+    transform: translateX(-50%);*/
+}
+
+.btn:hover {
+    background: #0e2c61;
+}
+
+.checkbox-container {
+    width: auto;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espace entre la case et le texte */
+    color: #fff;
+    font-size: 16px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #FFD700; /* couleur de la coche */
+    cursor: pointer;
+}
+
+.checkbox-container label {
+    cursor: pointer;
+}
+
+.href a{  
+color: #FFD700; 
+text-decoration: underline;
+}
+
+/* Effet shake */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+/* Texte Bienvenue à gauche */
+.text {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 40%;
+    left: 0; /* changement de right à left */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 100 90px; /* ajustable selon besoin */
+}
+.text h2 {
+    font-size: 28px;
+    color: #FF6B00;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.text p {
+    color: #112233;
+    font-size: 18px;
+    margin-bottom: 2px;
+    text-align: center;
+}

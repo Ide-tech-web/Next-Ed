@@ -1,4 +1,5 @@
 
+from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -83,3 +84,94 @@ class LeaderboardTests(APITestCase):
         # Bob should be second
         self.assertEqual(response.data[1]['student__first_name'], 'Bob')
         self.assertEqual(response.data[1]['total_score'], 80)
+
+
+class SearchFilterTests(APITestCase):
+    """Verify that the backend search_fields work on CourseViewSet."""
+
+    def setUp(self):
+        self.admin = CustomUser.objects.create_user(
+            email='admin@search.com', password='pass1234',
+            first_name='Alice', last_name='Smith', role='ADMIN',
+        )
+        self.client.force_authenticate(user=self.admin)
+
+        Course.objects.create(title='Python Basics', description='Learn Python', level=1, created_by=self.admin)
+        Course.objects.create(title='Java Advanced', description='Master Java', level=2, created_by=self.admin)
+        Course.objects.create(title='Data Structures', description='Python collections', level=1, created_by=self.admin)
+
+    def test_search_by_title(self):
+        url = reverse('course-list') + '?search=Python'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [c['title'] for c in response.data]
+        self.assertIn('Python Basics', titles)
+        self.assertNotIn('Java Advanced', titles)
+
+    def test_search_by_description(self):
+        url = reverse('course-list') + '?search=collections'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'Data Structures')
+
+    def test_search_by_author_name(self):
+        url = reverse('course-list') + '?search=Alice'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # All 3 courses are by Alice
+        self.assertEqual(len(response.data), 3)
+
+
+class SignalEmailTests(APITestCase):
+    """Verify the post_save signal on QuestionResponse sends an email."""
+
+    def setUp(self):
+        from .models import StudentQuestion
+        self.student = CustomUser.objects.create_user(
+            email='student@signal.com', password='pass1234',
+            first_name='Bob', role='STUDENT',
+        )
+        self.admin = CustomUser.objects.create_user(
+            email='admin@signal.com', password='pass1234',
+            first_name='Prof', last_name='X', role='ADMIN',
+        )
+        self.course = Course.objects.create(
+            title='Signal Course', description='Testing signals', level=1,
+            created_by=self.admin,
+        )
+        self.question = StudentQuestion.objects.create(
+            student=self.student,
+            course=self.course,
+            question_text='How do signals work?',
+            target_level=1,
+        )
+
+    @patch('api.signals.send_mail')
+    def test_signal_sends_email_on_new_answer(self, mock_send):
+        """Creating a QuestionResponse should trigger the signal and call send_mail."""
+        from .models import QuestionResponse
+        QuestionResponse.objects.create(
+            question=self.question,
+            admin=self.admin,
+            response_text='Signals are Django event hooks.',
+        )
+        mock_send.assert_called_once()
+        call_kwargs = mock_send.call_args
+        # Verify recipient is the student who asked
+        self.assertIn(self.student.email, call_kwargs[1]['recipient_list'])
+        # Verify HTML message is present
+        self.assertIn('html_message', call_kwargs[1])
+
+    @patch('api.signals.send_mail', side_effect=Exception('SMTP down'))
+    def test_signal_handles_email_failure_gracefully(self, mock_send):
+        """If send_mail raises, the QuestionResponse should still be saved."""
+        from .models import QuestionResponse
+        qr = QuestionResponse.objects.create(
+            question=self.question,
+            admin=self.admin,
+            response_text='This should still save.',
+        )
+        self.assertIsNotNone(qr.pk)
+        mock_send.assert_called_once()
+

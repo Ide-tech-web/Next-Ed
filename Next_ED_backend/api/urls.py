@@ -10,12 +10,15 @@ from rest_framework_simplejwt.views import (
 from .views import (
     RegisterView, LogoutView, UserProfileView, StatsView,
     VerifyEmailView, GoogleLoginView,
+    PasswordResetRequestView, PasswordResetConfirmView,
+    ChangePasswordView,
     UserViewSet, CourseViewSet, LessonViewSet, StudentProgressViewSet,
     NoteViewSet, ExerciseViewSet, ExamViewSet, CorrectionViewSet,
     StudentQuestionViewSet, QuestionResponseViewSet,
     QuizViewSet, LeaderboardViewSet,
     AdminUserManagementViewSet
 )
+from .throttles import AuthRateThrottle
 
 # Initialize the router
 router = DefaultRouter()
@@ -43,13 +46,17 @@ router.register(r'leaderboard', LeaderboardViewSet, basename='leaderboard')
 # Admin Management
 router.register(r'admin-management', AdminUserManagementViewSet, basename='admin-management')
 
+# Throttled JWT login view
+class ThrottledTokenObtainPairView(TokenObtainPairView):
+    throttle_classes = [AuthRateThrottle]
+
 urlpatterns = [
     # Router URLs
     path('', include(router.urls)),
     
     # Auth Endpoints
     path('register/', RegisterView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', ThrottledTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/', UserProfileView.as_view(), name='user-profile'),
@@ -60,6 +67,13 @@ urlpatterns = [
     # Email Verification
     path('verify-email/<str:uidb64>/<str:token>/', VerifyEmailView.as_view(), name='verify-email'),
     
+    # Password Reset
+    path('password-reset/', PasswordResetRequestView.as_view(), name='password-reset'),
+    path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
+    
     # Dashboard Stats
     path('stats/', StatsView.as_view(), name='dashboard-stats'),
+
+    # Change Password
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]

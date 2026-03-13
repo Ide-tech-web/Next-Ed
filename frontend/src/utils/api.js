@@ -70,6 +70,9 @@ export const authAPI = {
   logout: (refreshToken) => api.post('/logout/', { refresh_token: refreshToken }),
   getProfile: () => api.get('/profile/'),
   googleLogin: (credential) => api.post('/auth/google/', { credential }),
+  requestPasswordReset: (email) => api.post('/password-reset/', { email }),
+  confirmPasswordReset: (data) => api.post('/password-reset-confirm/', data),
+  changePassword: (data) => api.put('/change-password/', data),
 };
 
 // Course APIs

@@ -130,7 +130,7 @@ const Login = () => {
                             </button>
                         </div>
                         <div className="fgpw">
-                            <Link to="#">{t('forgotPassword')}</Link>
+                            <Link to="/forgot-password">{t('forgotPassword')}</Link>
                         </div>
                         <button type="submit" className="login-btn" disabled={loading}>
                             {loading ? '...' : t('login')}

@@ -23,6 +23,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('email', 'first_name', 'last_name', 'level', 'password', 'password2')
 
+    def validate_email(self, value):
+        """Explicit uniqueness check with a clear error message."""
+        if CustomUser.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("This email is already registered.")
+        return value.lower()
+
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
@@ -37,9 +43,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', ''),
             level=validated_data.get('level', 1),
         )
-        # Inactive until email is verified
-        user.is_active = False
-        user.save()
+        # User is active immediately — no email verification blocking login
         return user
 
 class CreateStaffSerializer(serializers.ModelSerializer):
@@ -204,11 +208,19 @@ class ExamSerializer(serializers.ModelSerializer):
 # --- Q&A Serializers ---
 class QuestionResponseSerializer(serializers.ModelSerializer):
     admin_email = serializers.ReadOnlyField(source='admin.email')
+    admin_name = serializers.SerializerMethodField()
+    admin_role = serializers.ReadOnlyField(source='admin.role')
 
     class Meta:
         model = QuestionResponse
-        fields = ['id', 'question', 'response_text', 'created_at', 'admin_email']
-        read_only_fields = ('admin_email',)
+        fields = ['id', 'question', 'response_text', 'created_at', 'admin_email', 'admin_name', 'admin_role']
+        read_only_fields = ('admin_email', 'admin_name', 'admin_role', 'created_at')
+
+    def get_admin_name(self, obj):
+        if obj.admin:
+            name = f"{obj.admin.first_name} {obj.admin.last_name}".strip()
+            return name or obj.admin.email
+        return 'Unknown'
 
 class StudentQuestionSerializer(serializers.ModelSerializer):
     responses = QuestionResponseSerializer(many=True, read_only=True)
@@ -216,4 +228,17 @@ class StudentQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentQuestion
-        fields = ['id', 'student_email', 'course', 'question_text', 'status', 'created_at', 'responses']
+        fields = ['id', 'student_email', 'course', 'question_text', 'target_level', 'status', 'created_at', 'responses']
+        read_only_fields = ('status', 'created_at', 'target_level')
+
+
+# --- Change Password Serializer ---
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({"confirm_password": "New passwords do not match."})
+        return attrs

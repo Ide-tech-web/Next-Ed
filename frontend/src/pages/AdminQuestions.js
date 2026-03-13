@@ -172,7 +172,10 @@ const AdminQuestions = () => {
                             marginLeft: '1.5rem',
                           }}>
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                              {resp.admin_email || 'Admin'} • {new Date(resp.created_at).toLocaleDateString()}
+                              ✍️ {resp.admin_name || resp.admin_email || 'Admin'}
+                              {resp.admin_role ? ` (${resp.admin_role})` : ''}
+                              {' • '}
+                              {new Date(resp.created_at).toLocaleString()}
                             </p>
                             <p style={{ margin: 0, color: 'var(--text-primary)' }}>{resp.response_text}</p>
                           </div>

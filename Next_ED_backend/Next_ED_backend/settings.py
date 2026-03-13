@@ -97,13 +97,36 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Next_ED_backend.wsgi.application'
 
 
-# Database — SQLite
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Database — PostgreSQL (with SQLite fallback)
+import dj_database_url
+
+DATABASE_URL = config('DATABASE_URL', default=None)
+
+if DATABASE_URL:
+    # Priority 1: Full DATABASE_URL (e.g. for Railway, Render, Heroku, etc.)
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL)
     }
-}
+elif config('DB_NAME', default=None):
+    # Priority 2: Individual DB_* variables from .env
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
+else:
+    # Fallback: SQLite (dev / no Postgres configured)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -141,12 +164,29 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# --- In-Memory Cache (no Redis dependency) ---
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'next-ed-cache',
+    }
+}
+
 
 # --- Django REST Framework Configuration ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '20/min',
+        'user': '1000/day',
+        'auth': '5/min',
+    },
 }
 
 # --- Simple JWT Configuration ---

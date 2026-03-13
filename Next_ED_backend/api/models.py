@@ -356,11 +356,15 @@ class StudentQuestion(models.Model):
         ('PENDING', 'Pending'),
         ('ANSWERED', 'Answered'),
     )
+    LEVEL_CHOICES = (
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+    )
     
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'STUDENT'},
         related_name='questions'
     )
     course = models.ForeignKey(
@@ -371,6 +375,12 @@ class StudentQuestion(models.Model):
         blank=True
     )
     question_text = models.TextField()
+    target_level = models.IntegerField(
+        choices=LEVEL_CHOICES,
+        null=True,
+        blank=True,
+        help_text='Level this question is targeted at'
+    )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
@@ -389,7 +399,7 @@ class StudentQuestion(models.Model):
 # ----------------- Question Response Model -----------------
 class QuestionResponse(models.Model):
     """
-    Admin responses to student questions
+    Admin/Delegate responses to student questions
     """
     question = models.ForeignKey(
         StudentQuestion,
@@ -399,10 +409,23 @@ class QuestionResponse(models.Model):
     admin = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        related_name='answered_questions'
     )
     response_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def answered_by_name(self):
+        if self.admin:
+            return f"{self.admin.first_name} {self.admin.last_name}".strip() or self.admin.email
+        return 'Unknown'
+
+    @property
+    def answered_by_role(self):
+        if self.admin:
+            return self.admin.role
+        return 'Unknown'
     
     def __str__(self):
         return f"Response by {self.admin.email if self.admin else 'Unknown'}"

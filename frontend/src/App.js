@@ -1,4 +1,4 @@
-// Main App Component with Routing + Page Transitions + Auth Redirect
+// Main App Component with Routing + Page Transitions + Auth Redirect + PWA
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute, AdminRoute, DelegateRoute } from './components/SharedComponents';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
+import InstallPrompt from './components/InstallPrompt';
 
 // Pages
 import Login from './pages/Login';
@@ -23,6 +24,8 @@ import AdminStudentManagement from './pages/AdminStudentManagement';
 import StaffManagement from './pages/StaffManagement';
 import DelegateDashboard from './pages/DelegateDashboard';
 import VerifyEmail from './pages/VerifyEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 
 // Smart home redirect — ALL authenticated users go to the Study Hub
 const HomeRedirect = () => {
@@ -50,6 +53,8 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email/:uid/:token" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirm />} />
 
         {/* Protected Routes - Student */}
         <Route
@@ -170,6 +175,7 @@ function App() {
         <AuthProvider>
           <Router>
             <AppRoutes />
+            <InstallPrompt />
           </Router>
         </AuthProvider>
       </LanguageProvider>

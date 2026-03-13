@@ -105,16 +105,8 @@ const PersonalDashboard = () => {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-3" style={{ marginBottom: '2rem' }}>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📚</div>
-            <h3 style={{ color: 'var(--primary)', fontSize: '2rem', marginBottom: '0.25rem' }}>
-              {courses.length}
-            </h3>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>{t('courses')}</p>
-          </div>
-
+        {/* Stats Grid — Simplified: Completed Items + Overall Progress */}
+        <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
           <div className="card" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>✅</div>
             <h3 style={{ color: 'var(--success)', fontSize: '2rem', marginBottom: '0.25rem' }}>

@@ -30,7 +30,6 @@ export const translations = {
     verifying: 'Vérification en cours...',
     redirectingToLogin: 'Redirection vers la page de connexion...',
     tryAgain: 'Réessayer',
-    passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
 
     // Navigation
     home: 'Accueil',
@@ -196,6 +195,26 @@ export const translations = {
     // Passwords
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
 
+    // Password Reset
+    forgotPasswordTitle: 'Mot de passe oublié ?',
+    resetPassword: 'Réinitialiser',
+    resetPasswordSubtitle: 'Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.',
+    sendResetLink: 'Envoyer le lien',
+    resetEmailSent: 'Si un compte existe avec cet email, un lien de réinitialisation a été envoyé.',
+    resetEmailError: 'Une erreur est survenue. Veuillez réessayer.',
+    checkEmailReset: 'Consultez votre email pour le lien de réinitialisation.',
+    checkSpam: 'Pensez à vérifier vos spams.',
+    backToLogin: 'Retour à la connexion',
+    newPasswordTitle: 'Nouveau Mot de Passe',
+    newPasswordSubtitle: 'Choisissez un mot de passe solide pour sécuriser votre compte.',
+    resetYourPassword: 'Réinitialisez votre mot de passe',
+    newPassword: 'Nouveau mot de passe',
+    confirmNewPassword: 'Confirmer le nouveau mot de passe',
+    resetPasswordBtn: 'Réinitialiser le mot de passe',
+    resetting: 'Réinitialisation...',
+    passwordResetSuccess: 'Mot de passe réinitialisé avec succès !',
+    resetError: 'Échec de la réinitialisation. Le lien est peut-être invalide ou expiré.',
+
     // Misc
     quickStats: 'Statistiques rapides',
     activeSystem: 'Système opérationnel',
@@ -235,7 +254,6 @@ export const translations = {
     verifying: 'Verifying...',
     redirectingToLogin: 'Redirecting to login...',
     tryAgain: 'Try Again',
-    passwordsDoNotMatch: 'Passwords do not match',
 
     // Navigation
     home: 'Home',
@@ -400,6 +418,26 @@ export const translations = {
 
     // Passwords
     passwordsDoNotMatch: 'Passwords do not match',
+
+    // Password Reset
+    forgotPasswordTitle: 'Forgot Password?',
+    resetPassword: 'Reset Password',
+    resetPasswordSubtitle: 'Enter your email and we\'ll send you a link to reset your password.',
+    sendResetLink: 'Send Reset Link',
+    resetEmailSent: 'If an account with that email exists, a password reset link has been sent.',
+    resetEmailError: 'Something went wrong. Please try again.',
+    checkEmailReset: 'Check your email for a password reset link.',
+    checkSpam: 'Don\'t forget to check your spam folder.',
+    backToLogin: 'Return to Login',
+    newPasswordTitle: 'New Password',
+    newPasswordSubtitle: 'Choose a strong password to secure your account.',
+    resetYourPassword: 'Reset Your Password',
+    newPassword: 'New Password',
+    confirmNewPassword: 'Confirm New Password',
+    resetPasswordBtn: 'Reset Password',
+    resetting: 'Resetting...',
+    passwordResetSuccess: 'Password reset successfully!',
+    resetError: 'Reset failed. The link may be invalid or expired.',
 
     // Misc
     quickStats: 'Quick Stats',

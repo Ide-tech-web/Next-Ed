@@ -17,6 +17,7 @@ const Register = () => {
     password2: '',
   });
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -69,16 +70,31 @@ const Register = () => {
     };
   }, [handleGoogleCredential]);
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name === 'email') {
+      if (value && !validateEmail(value)) {
+        setEmailError(t('invalidEmail') || 'Please enter a valid email address.');
+      } else {
+        setEmailError('');
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!validateEmail(formData.email)) {
+      setEmailError(t('invalidEmail') || 'Please enter a valid email address.');
+      return;
+    }
 
     if (formData.password !== formData.password2) {
       setError(t('passwordsDoNotMatch') || 'Les mots de passe ne correspondent pas');
@@ -182,7 +198,15 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                style={emailError ? { borderColor: 'rgba(239, 68, 68, 0.6)' } : {}}
               />
+              {emailError && (
+                <p style={{
+                  color: '#fca5a5',
+                  fontSize: '0.8rem',
+                  margin: '0.3rem 0 0 0.25rem',
+                }}>{emailError}</p>
+              )}
             </div>
 
             {/* Password with eye toggle */}

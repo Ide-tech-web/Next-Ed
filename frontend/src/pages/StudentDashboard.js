@@ -1,28 +1,46 @@
-// Student Dashboard - Main Page with Real-time Search
+// Student Dashboard - Main Page with Debounced Server-Side Search
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { courseAPI, progressAPI } from '../utils/api';
 import { Loading, CourseCard } from '../components/SharedComponents';
 import Navbar from '../components/Navbar';
+import useDebounce from '../hooks/useDebounce';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
   const [searchParams] = useSearchParams();
-  const initialLevel = searchParams.get('level') || '';
-  
+
+  // Default level: viewLevel from localStorage (set by navbar level switcher),
+  // then URL param, then user's assigned level, then show all
+  const getDefaultLevel = () => {
+    const viewLevel = localStorage.getItem('viewLevel');
+    if (viewLevel) return viewLevel;
+    const paramLevel = searchParams.get('level');
+    if (paramLevel) return paramLevel;
+    // Non-admin: default to their assigned level
+    if (user && user.role !== 'ADMIN' && user.level) return String(user.level);
+    return ''; // Admin: show all
+  };
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLevel, setSelectedLevel] = useState(initialLevel);
+  const [selectedLevel, setSelectedLevel] = useState(getDefaultLevel());
   const [searchTerm, setSearchTerm] = useState('');
   const [progress, setProgress] = useState([]);
 
+  // Debounce search term — API fires only after 500ms of no typing
+  const debouncedSearch = useDebounce(searchTerm, 500);
+
   const fetchCourses = React.useCallback(async () => {
     try {
-      const params = selectedLevel ? { level: selectedLevel } : {};
+      setLoading(true);
+      const params = {};
+      if (selectedLevel) params.level = selectedLevel;
+      if (debouncedSearch.trim()) params.search = debouncedSearch.trim();
       const response = await courseAPI.getAll(params);
       setCourses(response.data);
     } catch (error) {
@@ -30,7 +48,7 @@ const StudentDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedLevel]);
+  }, [selectedLevel, debouncedSearch]);
 
   const fetchProgress = React.useCallback(async () => {
     try {
@@ -46,16 +64,18 @@ const StudentDashboard = () => {
     fetchProgress();
   }, [fetchCourses, fetchProgress]);
 
-  // Real-time search filter with debounce effect
-  const filteredCourses = useMemo(() => {
-    if (!searchTerm.trim()) return courses;
-    
-    const term = searchTerm.toLowerCase();
-    return courses.filter(course => 
-      course.title.toLowerCase().includes(term) ||
-      course.description?.toLowerCase().includes(term)
-    );
-  }, [courses, searchTerm]);
+  // Listen for viewLevel changes from the navbar level switcher
+  useEffect(() => {
+    const handleViewLevelChanged = () => {
+      const newLevel = localStorage.getItem('viewLevel') || (user?.role !== 'ADMIN' ? String(user?.level || '') : '');
+      setSelectedLevel(newLevel);
+    };
+    window.addEventListener('viewLevelChanged', handleViewLevelChanged);
+    return () => window.removeEventListener('viewLevelChanged', handleViewLevelChanged);
+  }, [user]);
+
+  // Server-side search — results come pre-filtered from the API
+  const filteredCourses = courses;
 
   // Calculate progress stats
   const completedLessons = progress.filter(p => p.completed && p.lesson).length;
@@ -146,24 +166,26 @@ const StudentDashboard = () => {
             />
           </div>
 
-          {/* Level Filter Buttons */}
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => setSelectedLevel('')}
-              className={`btn ${!selectedLevel ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              {t('allLevels')}
-            </button>
-            {[1, 2, 3].map(level => (
+          {/* Level Filter Buttons — Admin only */}
+          {user?.role === 'ADMIN' && (
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <button
-                key={level}
-                onClick={() => setSelectedLevel(String(level))}
-                className={`btn ${selectedLevel === String(level) ? 'btn-accent' : 'btn-secondary'}`}
+                onClick={() => setSelectedLevel('')}
+                className={`btn ${!selectedLevel ? 'btn-primary' : 'btn-secondary'}`}
               >
-                {t('level')} {level}
+                {t('allLevels')}
               </button>
-            ))}
-          </div>
+              {[1, 2, 3].map(level => (
+                <button
+                  key={level}
+                  onClick={() => setSelectedLevel(String(level))}
+                  className={`btn ${selectedLevel === String(level) ? 'btn-accent' : 'btn-secondary'}`}
+                >
+                  {t('level')} {level}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Courses List */}

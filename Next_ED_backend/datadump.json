@@ -13,8 +13,8 @@
     "provider": "google",
     "provider_id": "",
     "name": "Google OAuth2",
-    "client_id": "812813626877-nrjg75bqld9ejvmfq70m883h7br9flq9.apps.googleusercontent.com",
-    "secret": "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",
+    "client_id": "YOUR_GOOGLE_CLIENT_ID",
+    "secret": "YOUR_GOOGLE_CLIENT_SECRET",
     "key": "",
     "settings": {},
     "sites": [

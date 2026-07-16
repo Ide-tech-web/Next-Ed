@@ -1,0 +1,423 @@
+[
+{
+  "model": "sites.site",
+  "fields": {
+    "domain": "example.com",
+    "name": "example.com"
+  }
+},
+{
+  "model": "socialaccount.socialapp",
+  "pk": 1,
+  "fields": {
+    "provider": "google",
+    "provider_id": "",
+    "name": "Google OAuth2",
+    "client_id": "YOUR_GOOGLE_CLIENT_ID",
+    "secret": "YOUR_GOOGLE_CLIENT_SECRET",
+    "key": "",
+    "settings": {},
+    "sites": [
+      [
+        "example.com"
+      ]
+    ]
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$qyBkn20SJdctz7gRsCeeY7$eZPtwsJZbxYTZh0I3HpxqUVKLpXoNavWqbyYt5wQtwE=",
+    "last_login": null,
+    "is_superuser": true,
+    "first_name": "Evans",
+    "last_name": "Bizzy",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-13T11:26:40.363Z",
+    "email": "bizzyevans17@gmail.com",
+    "role": "ADMIN",
+    "level": 1,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$260000$kH7a1P8gLmPfgukWWaGQlO$ytwYHuwchCf5EEESxb64ubJTYwozgtRRWfb5bR9Y2iw=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "azombi",
+    "last_name": "cacharel",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-14T10:27:39.085Z",
+    "email": "ac@gmail.com",
+    "role": "STUDENT",
+    "level": 1,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$260000$DOfuXpkXi8cmmQHiHkQOMW$mVXKgqUEzco217MLdS2Au+/HXPQlDUYuRPFzaazRSQM=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "koa",
+    "last_name": "valentine",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-22T08:51:50.843Z",
+    "email": "koavalentine@gmail.com",
+    "role": "STUDENT",
+    "level": 1,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$260000$cvZGDFZM9L6KXd3INsO2nt$4cHc1wd2wxV4DqyV+J/0fPD4t/ECPDWktSEkI2Beji8=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "EMMA",
+    "last_name": "HAGBE",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-10T11:17:40.941Z",
+    "email": "emm@gmail.com",
+    "role": "STUDENT",
+    "level": 2,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$260000$Rq6ZbUXDigc9t3TT5foLQU$zI7InB6y/Pggh7GIwCQvb6JojECBeWFNW+4n5dUh3fA=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "esther",
+    "last_name": "owona",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-10T14:43:28.789Z",
+    "email": "owonaesther96@gmail.com",
+    "role": "STUDENT",
+    "level": 2,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$260000$UaCGgoZQ8SgPTpXerTce0O$330yJsDPmPxQYpdl++06G+HmKMy/yXPq9MVJbM2P0gc=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "kol",
+    "last_name": "yp",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-10T15:24:47.087Z",
+    "email": "strange@gmail.com",
+    "role": "STUDENT",
+    "level": 1,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$9xpetzNrwYODn5Rg8k8VDM$0QyAEWXT/AdMS2ldhtdgFcBIcKWI6plRIR1GGR4qrYU=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "janny",
+    "last_name": "ziem",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2026-02-12T16:04:31.432Z",
+    "email": "ziemsoleil@gmail.com",
+    "role": "STUDENT",
+    "level": 3,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$dHYX8ujXqwcXZjKVG3LZEc$/LGV6tBB7otaPUKySWWtLStYCVbHBOrhuUnhxDgXbOI=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "Evanesce",
+    "last_name": "Selcouth",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-05T14:24:36.791Z",
+    "email": "es@gmail.com",
+    "role": "DELEGATE",
+    "level": 1,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.customuser",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$GcKcEdzQkV5rQyj1Kj7SWA$jssjsDmh6lDp/6U3Mz0nqWJRgzNGuygFa0qIZiYmJ7Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "JENNIFER",
+    "last_name": "WOUKENG",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-05T15:09:53.067Z",
+    "email": "jenniferwoukeng532@gmail.com",
+    "role": "STUDENT",
+    "level": 2,
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.course",
+  "pk": 1,
+  "fields": {
+    "title": "Introduction à Python",
+    "description": "Apprenez les bases de la programmation avec Python",
+    "level": 1,
+    "thumbnail": "",
+    "created_by": null,
+    "created_at": "2026-01-13T10:30:48.664Z",
+    "updated_at": "2026-01-13T10:30:48.664Z"
+  }
+},
+{
+  "model": "api.course",
+  "pk": 3,
+  "fields": {
+    "title": "Algorithmique Avancée",
+    "description": "Algorithmes de tri, recherche et optimisation",
+    "level": 2,
+    "thumbnail": "",
+    "created_by": null,
+    "created_at": "2026-01-13T10:30:48.792Z",
+    "updated_at": "2026-01-13T10:30:48.792Z"
+  }
+},
+{
+  "model": "api.course",
+  "pk": 4,
+  "fields": {
+    "title": "Intelligence Artificielle",
+    "description": "Machine Learning et Deep Learning",
+    "level": 3,
+    "thumbnail": "",
+    "created_by": null,
+    "created_at": "2026-01-13T10:30:48.819Z",
+    "updated_at": "2026-01-13T10:30:48.819Z"
+  }
+},
+{
+  "model": "api.course",
+  "pk": 5,
+  "fields": {
+    "title": "Développement Web",
+    "description": "HTML, CSS, JavaScript et frameworks modernes",
+    "level": 2,
+    "thumbnail": "",
+    "created_by": null,
+    "created_at": "2026-01-13T10:30:48.852Z",
+    "updated_at": "2026-01-19T16:08:56.811Z"
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 1,
+  "fields": {
+    "course": 1,
+    "title": "Leçon 1: Introduction à Python",
+    "content": "Contenu de la leçon 1 pour le cours Introduction à Python. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 1
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 2,
+  "fields": {
+    "course": 1,
+    "title": "Leçon 2: Introduction à Python",
+    "content": "Contenu de la leçon 2 pour le cours Introduction à Python. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 2
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 3,
+  "fields": {
+    "course": 1,
+    "title": "Leçon 3: Introduction à Python",
+    "content": "Contenu de la leçon 3 pour le cours Introduction à Python. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 3
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 7,
+  "fields": {
+    "course": 3,
+    "title": "Leçon 1: Algorithmique Avancée",
+    "content": "Contenu de la leçon 1 pour le cours Algorithmique Avancée. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 1
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 8,
+  "fields": {
+    "course": 3,
+    "title": "Leçon 2: Algorithmique Avancée",
+    "content": "Contenu de la leçon 2 pour le cours Algorithmique Avancée. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 2
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 9,
+  "fields": {
+    "course": 3,
+    "title": "Leçon 3: Algorithmique Avancée",
+    "content": "Contenu de la leçon 3 pour le cours Algorithmique Avancée. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 3
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 10,
+  "fields": {
+    "course": 4,
+    "title": "Leçon 1: Intelligence Artificielle",
+    "content": "Contenu de la leçon 1 pour le cours Intelligence Artificielle. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 1
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 11,
+  "fields": {
+    "course": 4,
+    "title": "Leçon 2: Intelligence Artificielle",
+    "content": "Contenu de la leçon 2 pour le cours Intelligence Artificielle. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 2
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 12,
+  "fields": {
+    "course": 4,
+    "title": "Leçon 3: Intelligence Artificielle",
+    "content": "Contenu de la leçon 3 pour le cours Intelligence Artificielle. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 3
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 13,
+  "fields": {
+    "course": 5,
+    "title": "Leçon 1: Développement Web",
+    "content": "Contenu de la leçon 1 pour le cours Développement Web. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 1
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 14,
+  "fields": {
+    "course": 5,
+    "title": "Leçon 2: Développement Web",
+    "content": "Contenu de la leçon 2 pour le cours Développement Web. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 2
+  }
+},
+{
+  "model": "api.lesson",
+  "pk": 15,
+  "fields": {
+    "course": 5,
+    "title": "Leçon 3: Développement Web",
+    "content": "Contenu de la leçon 3 pour le cours Développement Web. Cette leçon couvre les concepts fondamentaux et les applications pratiques.",
+    "file_path": "",
+    "order": 3
+  }
+},
+{
+  "model": "api.note",
+  "pk": 1,
+  "fields": {
+    "title": "mat211",
+    "description": "cours d'algebre",
+    "file": "notes/Fiche_de_T.D._N1_MAT211_25-26.pdf",
+    "course": 3,
+    "level": 1,
+    "created_by": [
+      "bizzyevans17@gmail.com"
+    ],
+    "created_at": "2026-01-13T11:48:50.772Z"
+  }
+},
+{
+  "model": "api.studentquestion",
+  "pk": 8,
+  "fields": {
+    "student": [
+      "jenniferwoukeng532@gmail.com"
+    ],
+    "course": null,
+    "question_text": "okay bro, c'est jenny je teste ton app.... reponds des que possible",
+    "status": "ANSWERED",
+    "created_at": "2026-03-05T15:12:48.250Z",
+    "updated_at": "2026-03-05T15:13:53.560Z"
+  }
+},
+{
+  "model": "api.questionresponse",
+  "pk": 7,
+  "fields": {
+    "question": 8,
+    "admin": [
+      "bizzyevans17@gmail.com"
+    ],
+    "response_text": "okay bro, j'ai ya",
+    "created_at": "2026-03-05T15:13:53.554Z"
+  }
+}
+]

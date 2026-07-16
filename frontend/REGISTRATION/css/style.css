@@ -10,8 +10,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    /*background-image: url("img/Img1.jpg");*/
-    background: #b1aeae;
+
     background-size: cover;
     background-position: center;
 }
@@ -128,7 +127,6 @@ body {
 
     bottom: 70px;       /* distance depuis le bas du container */
     left: 50%;          /* centre horizontalement */
-    transform: translateX(-50%);*/
 }
 
 .btn:hover {
